@@ -695,6 +695,9 @@
     <None Include="data\orbita-browser\chrome.dll.lib">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Content Include="data\orbita-browser\chrome.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="data\orbita-browser\chrome_100_percent.pak">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
