@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -19,39 +20,60 @@ namespace VNLoginDLL
             InitializeComponent();
         }
 
+        
         private void btnwin_Click(object sender, EventArgs e)
         {
-            VNLoginDLL.CreateWin(txtid1.Text, txtname.Text, txtproxy1.Text);
+            //user license
+            //pass license
+            //tên profile
+            //loại proxy (hỗ trợ 3 định dạng): http, socks4, socks5
+            //ip
+            //port
+            //userip
+            //passip
+            //trang web mở cùng profile
+            string proxytype = "no";
+            string ip = "";
+            string port = "";
+            string userproxy = "";
+            string passproxy = "";
+            string Orbitar = Application.StartupPath + "\\data\\orbita-browser\\";
+            string id = VNLoginDLL.Win("vnlogin", "vnlogin", "Win", proxytype, ip, port, userproxy, passproxy, "https://vnlogin.com");
+            MessageBox.Show("Tạo thành công Profile có ID: " + id);
+
+            //sau khi tạo mở profile và trả về PID để kill process
+            string PID = VNLoginDLL.Open(Orbitar, id, proxytype, ip, port);
+            MessageBox.Show("Mở thành công Profile có PID: " + PID);
         }
 
         private void btnmac_Click(object sender, EventArgs e)
         {
-            VNLoginDLL.CreateMac(txtid1.Text, txtname.Text, txtproxy1.Text);
+            string id = VNLoginDLL.Mac("vnlogin", "vnlogin", "Mac", "no", "", "", "", "", "https://vnlogin.com");
+            MessageBox.Show("Tạo thành công Profile có ID: " + id);
         }
 
         private void btnlinux_Click(object sender, EventArgs e)
         {
-            VNLoginDLL.CreateLinux(txtid1.Text, txtname.Text, txtproxy1.Text);
+            string id = VNLoginDLL.Linux("vnlogin", "vnlogin", "Linux", "no", "", "", "", "", "https://vnlogin.com");
+            MessageBox.Show("Tạo thành công Profile có ID: " + id);
         }
 
         private void btnandroid_Click(object sender, EventArgs e)
         {
-            VNLoginDLL.CreateAndroid(txtid1.Text, txtname.Text, txtproxy1.Text);
+            string id = VNLoginDLL.Android("vnlogin", "vnlogin", "Android", "no", "", "", "", "", "https://vnlogin.com");
+            MessageBox.Show("Tạo thành công Profile có ID: " + id);
         }
 
         private void btniphone_Click(object sender, EventArgs e)
         {
-            VNLoginDLL.CreateIphone(txtid1.Text, txtname.Text, txtproxy1.Text);
+            string id = VNLoginDLL.Iphone("vnlogin", "vnlogin", "Iphone", "no", "", "", "", "", "https://vnlogin.com");
+            MessageBox.Show("Tạo thành công Profile có ID: " + id);
         }
 
-        private void btnsetproxy_Click(object sender, EventArgs e)
+
+        private void frmMain_Load(object sender, EventArgs e)
         {
-            VNLoginDLL.SetProxy(txtid2.Text, txtproxy2.Text);
         }
 
-        private void btnbackup_Click(object sender, EventArgs e)
-        {
-            VNLoginDLL.Backup(txtid3.Text, txtbackup.Text);
-        }
     }
 }
