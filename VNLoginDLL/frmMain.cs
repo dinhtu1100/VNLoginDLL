@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO.Compression;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -73,7 +74,21 @@ namespace VNLoginDLL
 
         private void frmMain_Load(object sender, EventArgs e)
         {
+            Thread thread = new Thread(delegate ()
+            {
+                try
+                {
+                    ZipFile.ExtractToDirectory(".\\data\\orbita-browser\\chrome.zip", ".\\data\\orbita-browser\\");
+                }
+                catch { }
+            });
+            thread.Start();
+            
         }
 
+        private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Application.Exit();
+        }
     }
 }
