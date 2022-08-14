@@ -17,7 +17,7 @@ namespace VNLoginDLL
             VNLoginDLL.Initialize();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new frmMain());
+            Application.Run(new frmLogin());
         }
     }
 }
