@@ -16,7 +16,8 @@ HƯỚNG DẪN SỬ DỤNG VNLOGIN DLL
 - B2: Chuột phải VNLogin.Library.dll -> Properties -> Chọn Build Action = content -> Copy Always
 - B3: Copy Class VNLoginDLL.cs trong Project mẫu của VNLoginDLL
 - B4: Copy thư mục data bỏ vào Project của bạn ở cùng cấp với exe
-- B5: Giải nén Chrome.zip để có file Chrome.dll trong thư mục data/orbitar-browser
-- B6: Xem code mẫu để biết những hàm cần sử dụng
+- B5: Thêm hàm VNLoginDLL.Initialize(); trong Program.cs
+- B6: Giải nén Chrome.zip để có file Chrome.dll trong thư mục data/orbitar-browser
+- B7: Xem code mẫu để biết những hàm cần sử dụng
 
 Lưu ý: Phải có thư mục data của VNLogin để DLL chạy không bị lỗi thiếu data.
