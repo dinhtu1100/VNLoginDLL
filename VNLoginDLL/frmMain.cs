@@ -118,42 +118,22 @@ namespace VNLoginDLL
 
         private void btnmac_Click(object sender, EventArgs e)
         {
-            string id = VNLoginDLL.Mac("vnlogin", "vnlogin", "Mac", "no", "", "", "", "", "https://vnlogin.com");
-            MessageBox.Show("Tạo thành công Profile có ID: " + id);
-
-            //sau khi tạo mở profile và trả về PID để kill process
-            string PID = VNLoginDLL.Open(Orbitar, id, proxytype, ip, port);
-            MessageBox.Show("Mở thành công Profile có PID: " + PID);
+            MessageBox.Show("Bạn tự viết theo mẫu Create Win nhé!");
         }
 
         private void btnlinux_Click(object sender, EventArgs e)
         {
-            string id = VNLoginDLL.Linux("vnlogin", "vnlogin", "Linux", "no", "", "", "", "", "https://vnlogin.com");
-            MessageBox.Show("Tạo thành công Profile có ID: " + id);
-
-            //sau khi tạo mở profile và trả về PID để kill process
-            string PID = VNLoginDLL.Open(Orbitar, id, proxytype, ip, port);
-            MessageBox.Show("Mở thành công Profile có PID: " + PID);
+            MessageBox.Show("Bạn tự viết theo mẫu Create Win nhé!");
         }
 
         private void btnandroid_Click(object sender, EventArgs e)
         {
-            string id = VNLoginDLL.Android("vnlogin", "vnlogin", "Android", "no", "", "", "", "", "https://vnlogin.com");
-            MessageBox.Show("Tạo thành công Profile có ID: " + id);
-
-            //sau khi tạo mở profile và trả về PID để kill process
-            string PID = VNLoginDLL.Open(Orbitar, id, proxytype, ip, port);
-            MessageBox.Show("Mở thành công Profile có PID: " + PID);
+            MessageBox.Show("Bạn tự viết theo mẫu Create Win nhé!");
         }
 
         private void btniphone_Click(object sender, EventArgs e)
         {
-            string id = VNLoginDLL.Iphone("vnlogin", "vnlogin", "Iphone", "no", "", "", "", "", "https://vnlogin.com");
-            MessageBox.Show("Tạo thành công Profile có ID: " + id);
-
-            //sau khi tạo mở profile và trả về PID để kill process
-            string PID = VNLoginDLL.Open(Orbitar, id, proxytype, ip, port);
-            MessageBox.Show("Mở thành công Profile có PID: " + PID);
+            MessageBox.Show("Bạn tự viết theo mẫu Create Win nhé!");
         }
 
         #endregion

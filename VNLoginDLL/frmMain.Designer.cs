@@ -528,9 +528,9 @@
             this.label17.AutoSize = true;
             this.label17.Location = new System.Drawing.Point(8, 122);
             this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(170, 13);
+            this.label17.Size = new System.Drawing.Size(105, 13);
             this.label17.TabIndex = 17;
-            this.label17.Text = "3. Open Sele thường + Login gmail";
+            this.label17.Text = "3. Open Sele thường";
             // 
             // label18
             // 

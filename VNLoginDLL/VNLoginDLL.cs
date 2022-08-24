@@ -107,7 +107,7 @@ namespace VNLoginDLL
             GPU_win();
             string txtvendor = Marshal.PtrToStringAnsi(vendorLB());
             string txtrender = Marshal.PtrToStringAnsi(rendererLB());
-            string mess = Newprofile("true", "noise", "8", "4", "1", "2", "1", "false", height, width, name, "0", "Win32", LoaiProxy, "", ip, port, userip, passip, url, UA, txtrender, txtvendor);
+            string mess = Newprofile("true", "noise", "8192", "4096", "1", "2", "1", "false", height, width, name, "0", "Win32", LoaiProxy, "", ip, port, userip, passip, url, UA, txtrender, txtvendor);
             if (mess != "er1" && mess != "er2" && mess != "er3" && mess != "expired")
             {
                 //return Marshal.PtrToStringAnsi(id());
@@ -143,7 +143,7 @@ namespace VNLoginDLL
             GPU_mac_intel();
             string txtvendor = Marshal.PtrToStringAnsi(vendorLB());
             string txtrender = Marshal.PtrToStringAnsi(rendererLB());
-            Newprofile("true", "noise", "8", "4", "1", "2", "1", "false", height, width, name, "0", "Win32", LoaiProxy, "", ip, port, userip, passip, url, UA, txtrender, txtvendor);
+            Newprofile("true", "noise", "8192", "4096", "1", "2", "1", "false", height, width, name, "0", "MacIntel", LoaiProxy, "", ip, port, userip, passip, url, UA, txtrender, txtvendor);
             return Marshal.PtrToStringAnsi(id());
         }
         public static string Linux(string user, string pass, string name, string ProxyType, string ip, string port, string userip, string passip, string url)
@@ -173,7 +173,7 @@ namespace VNLoginDLL
             GPU_linux();
             string txtvendor = Marshal.PtrToStringAnsi(vendorLB());
             string txtrender = Marshal.PtrToStringAnsi(rendererLB());
-            Newprofile( "true", "noise", "8", "4", "1", "2", "1", "false", height, width, name, "0", txtPlatform, LoaiProxy, "", ip, port, userip, passip, url, UA, txtrender, txtvendor);
+            Newprofile( "true", "noise", "8192", "4096", "1", "2", "1", "false", height, width, name, "0", txtPlatform, LoaiProxy, "", ip, port, userip, passip, url, UA, txtrender, txtvendor);
             return Marshal.PtrToStringAnsi(id());
         }
         public static string Android(string user, string pass, string name, string ProxyType, string ip, string port, string userip, string passip, string url)
@@ -204,7 +204,7 @@ namespace VNLoginDLL
             GPU_win();
             string txtvendor = Marshal.PtrToStringAnsi(vendorLB());
             string txtrender = Marshal.PtrToStringAnsi(rendererLB());
-            Newprofile( "true", "noise", "8", "4", "1", "2", "1", "true", height, width, name, "5", txtPlatform, LoaiProxy, "", ip, port, userip, passip, url, UA, txtrender, txtvendor);
+            Newprofile( "true", "noise", "8192", "4096", "1", "2", "1", "true", height, width, name, "5", txtPlatform, LoaiProxy, "", ip, port, userip, passip, url, UA, txtrender, txtvendor);
             return Marshal.PtrToStringAnsi(id());
         }
         public static string Iphone(string user, string pass, string name, string ProxyType, string ip, string port, string userip, string passip, string url)
@@ -231,7 +231,7 @@ namespace VNLoginDLL
             UA_Iphone();
             string UA = Marshal.PtrToStringAnsi(useragent());
             GPU_win();
-            Newprofile( "true", "noise", "8", "4", "1", "2", "1", "true", height, width, name, "5", "iOS", LoaiProxy, "", ip, port, userip, passip, url, UA, "Apple GPU", "Apple Inc.");
+            Newprofile( "true", "noise", "8192", "4096", "1", "2", "1", "true", height, width, name, "5", "iOS", LoaiProxy, "", ip, port, userip, passip, url, UA, "Apple GPU", "Apple Inc.");
             return Marshal.PtrToStringAnsi(id());
         }
         [DllImport("VNLogin.Library.dll", EntryPoint = "id", CallingConvention = CallingConvention.StdCall)]
