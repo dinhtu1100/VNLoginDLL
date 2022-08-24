@@ -1,4 +1,6 @@
-﻿using System;
+﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -10,6 +12,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using PuppeteerSharp;
+using PuppeteerExtraSharp;
+using OpenQA.Selenium.Support.UI;
 
 namespace VNLoginDLL
 {
@@ -81,7 +86,7 @@ namespace VNLoginDLL
         string port = "";
         string userproxy = "c";
         string passproxy = "";
-        string Orbitar = @"C:\Users\vodin\.gologin\browser\orbita-browser\";
+        string Orbitar = @"C:\Users\vodin\VNLogin\data\orbita-browser\";
 
         private void btnwin_Click(object sender, EventArgs e)
         {
@@ -236,5 +241,153 @@ namespace VNLoginDLL
                     
             }
         }
+        private void btnRestore_Click(object sender, EventArgs e)
+        {
+            var FileBackup = new OpenFileDialog();
+            if(FileBackup.ShowDialog() == DialogResult.OK)
+            {
+                string PathBackup = FileBackup.FileName;
+                /*
+                 * Backup Profile thất bại:
+                 *      StatusBackup = er1 (lỗi quá giới hạn thiết bị được phép đăng nhập, chờ vài phút để session reset)
+                 *      StatusBackup = er2 (lỗi key không đúng)
+                 *      StatusBackup = er3 (lỗi user không tồn tại)
+                 *      StatusBackup = expired (lỗi hết hạn sử dụng key)
+                 */
+                string StatusRestore = VNLoginDLL.RestoreVNLogin(PathBackup);
+                if (StatusRestore != "er1" && StatusRestore != "er2" && StatusRestore != "er3" && StatusRestore != "expired")
+                {
+                    MessageBox.Show("Restore thành công");
+                }
+                else
+                {
+                    MessageBox.Show("Lỗi " + StatusRestore);
+                }
+            }
+        }
+        private void txtOpen_Click(object sender, EventArgs e)
+        {
+            //bạn phải có thông tin loại proxy, IP Proxy và Port trước đó đã add cho profile
+            //data này bạn phải tự lưu trữ để mở profile cho chuẩn
+            //mặc định mình đang để ko có proxy
+            string PID = VNLoginDLL.Open(Orbitar, txtIDopen.Text, "no", "", "");
+            MessageBox.Show("Mở thành công Profile có PID: " + PID);
+        }
+
+        ChromeDriver driver;
+        ChromeOptions chromeOptions = new ChromeOptions();
+        ChromeDriverService chromeDriverService = ChromeDriverService.CreateDefaultService();
+        private void btnOpenRemote_Click(object sender, EventArgs e)
+        {
+            //bạn phải có thông tin loại proxy, IP Proxy và Port trước đó đã add cho profile
+            //data này bạn phải tự lưu trữ để mở profile cho chuẩn
+            //mặc định mình đang để ko có proxy
+            string RemotePort = VNLoginDLL.OpenRemote(Orbitar, txtIDopenRemote.Text, "no", "", "");
+
+
+            //Kết nối với selenium để điều khiển Port
+            chromeDriverService.HideCommandPromptWindow = true;
+            chromeOptions.DebuggerAddress = $"localhost:{RemotePort}";
+
+            driver = new ChromeDriver(chromeDriverService, chromeOptions);
+            driver.Url = "https://google.com";
+            driver.Navigate();
+
+            Thread.Sleep(500);
+            driver
+                .FindElement(By.XPath("/html/body/div[1]/div[3]/form/div[1]/div[1]/div[1]/div/div[2]/input"))
+                .SendKeys("vnlogin");
+
+            Thread.Sleep(500);
+            driver
+                .FindElement(By.XPath("/html/body/div[1]/div[3]/form/div[1]/div[1]/div[1]/div/div[2]/input"))
+                .SendKeys(OpenQA.Selenium.Keys.Enter);
+
+            Thread.Sleep(1000);
+            driver
+                .FindElement(By.XPath("/html/body/div[7]/div/div[11]/div/div[2]/div[2]/div/div/div[1]/div/div/div[1]/div/a/h3"))
+                .Click();
+
+            Thread.Sleep(3000);
+            driver.Url = "https://youtube.com";
+            driver.Navigate();
+
+            Thread.Sleep(1000);
+            driver
+                .FindElement(By.XPath("/html/body/ytd-app/div[1]/div/ytd-masthead/div[3]/div[2]/ytd-searchbox/form/div[1]/div[1]/input"))
+                .SendKeys("vnlogin");
+
+            Thread.Sleep(1000);
+            driver
+                .FindElement(By.XPath("/html/body/ytd-app/div[1]/div/ytd-masthead/div[3]/div[2]/ytd-searchbox/form/div[1]/div[1]/input"))
+                .SendKeys(OpenQA.Selenium.Keys.Enter);
+
+            Thread.Sleep(1000);
+            driver
+                .FindElement(By.XPath("/html/body/ytd-app/div[1]/ytd-page-manager/ytd-search/div[1]/ytd-two-column-search-results-renderer/div/ytd-section-list-renderer/div[2]/ytd-item-section-renderer/div[3]/ytd-video-renderer[1]/div[1]/ytd-thumbnail/a/yt-img-shadow/img"))
+                .Click();
+
+            Thread.Sleep(3000);
+            driver
+                .FindElement(By.XPath("/html/body/ytd-app/div[1]/div/ytd-masthead/div[3]/div[3]/div[2]/ytd-button-renderer/a/tp-yt-paper-button"))
+                .Click();
+
+
+            
+
+        }
+
+        private void btnOpenSele_Click(object sender, EventArgs e)
+        {
+            chromeOptions.BinaryLocation = Orbitar + "\\chrome.exe";
+            chromeDriverService.HideCommandPromptWindow = true;
+
+
+            //chromeOptions.AddArgument("--disable-blink-features=AutomationControlled");
+            chromeOptions.AddExcludedArgument("enable-automation");
+            chromeOptions.AddArguments("--disable-web-security");
+            chromeOptions.AddArguments("--allow-running-insecure-content");
+            chromeOptions.AddArgument("--mute-audio");
+            chromeOptions.AddArgument("--disable-gpu");
+            chromeOptions.AddArgument("--disable-dev-shm-usage");
+            chromeOptions.AddArgument("--disable-extensions");
+            chromeOptions.AddArgument("--profile-directory=Default");
+            chromeOptions.AddArgument("--disable-plugins-discovery");
+            //chromeOptions.AddArgument("--user-agent=Mozilla/5.0 (iPhone; CPU iPhone OS 15_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/98.0.4758.85 Mobile/15E148 Safari/604.1");
+            chromeOptions.AddArguments($@"user-data-dir={AppDomain.CurrentDomain.BaseDirectory}\\profile\\{txtOpenSele.Text}");
+
+            driver = new ChromeDriver(chromeDriverService, chromeOptions);
+            driver.Url = "https://google.com";
+            driver.Navigate();
+
+            Thread.Sleep(1000);
+            driver
+                .FindElement(By.XPath("/html/body/div[1]/div[1]/div/div/div/div[2]/a"))
+                .Click();
+
+            Thread.Sleep(1000);
+            string userMail = "vodinhtu.com@gmail.com";
+
+            foreach (char letter in userMail)
+            {
+                driver
+                .FindElement(By.XPath("/html/body/div[1]/div[1]/div[2]/div/c-wiz/div/div[2]/div/div[1]/div/form/span/section/div/div/div[1]/div/div[1]/div/div[1]/input"))
+                .SendKeys(letter.ToString());
+
+                System.Threading.Thread.Sleep(300);
+            }
+
+            //Thread.Sleep(1000);
+            //driver
+            //    .FindElement(By.XPath("/html/body/div[1]/div[1]/div[2]/div/div[2]/div/div/div[2]/div/div[1]/div/form/span/section/div/div/div[1]/div/div[1]/div/div[1]/input"))
+            //    .SendKeys("vodinhtu.com@gmail.com");
+
+            Thread.Sleep(1000);
+            driver
+                .FindElement(By.XPath("/html/body/div[1]/div[1]/div[2]/div/div[2]/div/div/div[2]/div/div[1]/div/form/span/section/div/div/div[1]/div/div[1]/div/div[1]/input"))
+                .SendKeys(OpenQA.Selenium.Keys.Enter);
+        }
+
+       
     }
 }

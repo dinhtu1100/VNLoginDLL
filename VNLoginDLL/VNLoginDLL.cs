@@ -47,6 +47,39 @@ namespace VNLoginDLL
             string PID = process.Id.ToString();
             return PID;
         }
+        public static string OpenRemote(string Orbitar, string id, string ProxyType, string ip, string port)
+        {
+            Random random = new Random();
+            int RemotePort = random.Next(1000, 9999);
+            string User = AppDomain.CurrentDomain.BaseDirectory + "\\profile\\" + id;
+            string proxy = "";
+            string host = "";
+            Process process = new Process();
+            process.StartInfo = new ProcessStartInfo(Orbitar + "\\chrome.exe");
+            switch (ProxyType)
+            {
+                case "http":
+                    proxy = $@"--proxy-server={ip}:{port}";
+                    host = $@"--host-resolver-rules=""MAP * 0.0.0.0 , EXCLUDE {ip}""";
+                    process.StartInfo.Arguments = $@"--user-data-dir=""{User}"" --disable-encryption --restore-last-session --font-masking-mode=2 {proxy} {host} --remote-debugging-port={RemotePort}";
+                    break;
+                case "socks4":
+                    proxy = $@"--proxy-server=socks4://{ip}:{port}";
+                    host = $@"--host-resolver-rules=""MAP * 0.0.0.0 , EXCLUDE {ip}""";
+                    process.StartInfo.Arguments = $@"--user-data-dir=""{User}"" --disable-encryption --restore-last-session --font-masking-mode=2 {proxy} {host} --remote-debugging-port={RemotePort}";
+                    break;
+                case "socks5":
+                    proxy = $@"--proxy-server=socks5://{ip}:{port}";
+                    host = $@"--host-resolver-rules=""MAP * 0.0.0.0 , EXCLUDE {ip}""";
+                    process.StartInfo.Arguments = $@"--user-data-dir=""{User}"" --disable-encryption --restore-last-session --font-masking-mode=2 {proxy} {host} --remote-debugging-port={RemotePort}";
+                    break;
+                default:
+                    process.StartInfo.Arguments = $@"--user-data-dir=""{User}"" --disable-encryption --restore-last-session --font-masking-mode=2 --remote-debugging-port={RemotePort}";
+                    break;
+            }
+            process.Start();
+            return RemotePort.ToString();
+        }
         public static string Win(string name, string ProxyType, string ip, string port, string userip, string passip, string url)
         {
             string LoaiProxy = "";
@@ -70,7 +103,7 @@ namespace VNLoginDLL
             DoPhanGiaiPC();
             string width = Marshal.PtrToStringAnsi(DPG()).Split('x')[0];
             string height = Marshal.PtrToStringAnsi(DPG()).Split('x')[1];
-            string UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.60 Safari/537.36";
+            string UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.53 Safari/537.36";
             GPU_win();
             string txtvendor = Marshal.PtrToStringAnsi(vendorLB());
             string txtrender = Marshal.PtrToStringAnsi(rendererLB());
@@ -596,7 +629,7 @@ namespace VNLoginDLL
 
         }
 
-        public static string RestoreVNLogin(string FileBackup, bool DeleteBackup)
+        public static string RestoreVNLogin(string FileBackup)
         {
             string info = Marshal.PtrToStringAnsi(CheckInfo(Session));
             string mess = "success";
@@ -619,18 +652,10 @@ namespace VNLoginDLL
                         break;
                 }
             }
-
-            string PathProfile = AppDomain.CurrentDomain.BaseDirectory + "\\profile\\";
+            string[] pathArr = FileBackup.Split('\\');
+            string ID = pathArr.Last().Replace(".zip","");
+            string PathProfile = AppDomain.CurrentDomain.BaseDirectory + "\\profile\\" + ID;
             mess = Marshal.PtrToStringAnsi(Restore(userVNLogin, licenseVNLogin, Session, FileBackup, PathProfile));
-
-            if (DeleteBackup == true)
-            {
-                try
-                {
-                    Directory.Delete(FileBackup, true);
-                }
-                catch { }
-            }
 
             return mess;
 
