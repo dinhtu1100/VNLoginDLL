@@ -496,7 +496,7 @@ namespace VNLoginDLL
                 int monthNow = int.Parse(timeNow[1]);
                 int yearNow = int.Parse(timeNow[2]);
 
-                string TimeEx = info.Substring(1,8);
+                string TimeEx = info.Substring(0,8);
 
                 int dayEx = int.Parse(TimeEx.Substring(6, 2));
                 int monthEx = int.Parse(TimeEx.Substring(4, 2));
