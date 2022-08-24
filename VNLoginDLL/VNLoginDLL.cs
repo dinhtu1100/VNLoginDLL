@@ -498,7 +498,8 @@ namespace VNLoginDLL
                     int monthNow = int.Parse(timeNow[1]);
                     int yearNow = int.Parse(timeNow[2]);
 
-                    string TimeEx = info.Substring(0, 8);
+                    string TimeEx = Regex.Match(info, @"expTime...*?,", RegexOptions.Singleline).Value
+                        .Replace(Regex.Match(info, @"expTime..", RegexOptions.Singleline).Value, "");
 
                     int dayEx = int.Parse(TimeEx.Substring(6, 2));
                     int monthEx = int.Parse(TimeEx.Substring(4, 2));

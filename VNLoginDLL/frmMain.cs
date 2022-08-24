@@ -86,7 +86,7 @@ namespace VNLoginDLL
         string port = "";
         string userproxy = "c";
         string passproxy = "";
-        string Orbitar = @"C:\Users\vodin\VNLogin\data\orbita-browser\";
+        string Orbitar = @"C:\Users\vodin\Documents\Zalo Received Files\mulbrowser\";
 
         private void btnwin_Click(object sender, EventArgs e)
         {
@@ -323,16 +323,12 @@ namespace VNLoginDLL
             chromeDriverService.HideCommandPromptWindow = true;
 
 
-            //chromeOptions.AddArgument("--disable-blink-features=AutomationControlled");
+            chromeOptions.AddArgument("--disable-blink-features=AutomationControlled");
             chromeOptions.AddExcludedArgument("enable-automation");
             chromeOptions.AddArguments("--disable-web-security");
             chromeOptions.AddArguments("--allow-running-insecure-content");
-            chromeOptions.AddArgument("--mute-audio");
-            chromeOptions.AddArgument("--disable-gpu");
-            chromeOptions.AddArgument("--disable-dev-shm-usage");
-            chromeOptions.AddArgument("--disable-extensions");
-            chromeOptions.AddArgument("--profile-directory=Default");
-            chromeOptions.AddArgument("--disable-plugins-discovery");
+
+
             //chromeOptions.AddArgument("--user-agent=Mozilla/5.0 (iPhone; CPU iPhone OS 15_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/98.0.4758.85 Mobile/15E148 Safari/604.1");
             chromeOptions.AddArguments($@"user-data-dir={AppDomain.CurrentDomain.BaseDirectory}\\profile\\{txtOpenSele.Text}");
 
@@ -364,7 +360,7 @@ namespace VNLoginDLL
 
             Thread.Sleep(1000);
             driver
-                .FindElement(By.XPath("/html/body/div[1]/div[1]/div[2]/div/div[2]/div/div/div[2]/div/div[1]/div/form/span/section/div/div/div[1]/div/div[1]/div/div[1]/input"))
+                .FindElement(By.XPath("/html/body/div[1]/div[1]/div[2]/div/c-wiz/div/div[2]/div/div[1]/div/form/span/section/div/div/div[1]/div/div[1]/div/div[1]/input"))
                 .SendKeys(OpenQA.Selenium.Keys.Enter);
         }
 
