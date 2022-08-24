@@ -1,5 +1,13 @@
 # VNLoginDLL
 
+
+Update V2: 24/08/2022
+    - đổi cách check license
+    - update hàm đăng nhập
+    - update hàm Create
+    - update backup - restore
+    - Bổ sung hàm open - open remote debugging port
+    
 HƯỚNG DẪN SỬ DỤNG VNLOGIN DLL
 
 1. Mục đích:
@@ -34,3 +42,6 @@ LỖI THƯỜNG GẶP
   - er2: (lỗi key không đúng)
   - er3: (lỗi user không tồn tại)
   - expired: (lỗi hết hạn sử dụng key)
+  
+VNLOGINDLL ĐANG PHÁT TRIỂN NÊN CÓ THỂ UPDATE LIÊN TỤC. BẠN HÃY XEM HƯỚNG DẪN THƯỜNG XUYÊN ĐỂ CẬP NHẬT HÀM NHÉ!  
+
