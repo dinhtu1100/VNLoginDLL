@@ -536,11 +536,11 @@
             // 
             this.label18.AutoSize = true;
             this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label18.Location = new System.Drawing.Point(80, 11);
+            this.label18.Location = new System.Drawing.Point(88, 11);
             this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(808, 25);
+            this.label18.Size = new System.Drawing.Size(792, 25);
             this.label18.TabIndex = 14;
-            this.label18.Text = "CODE MẪU - HƯỚNG DẪN SỬ DỤNG VNLOGIN DLL (CHÚNG BẠN THÀNH CÔNG)";
+            this.label18.Text = "CODE MẪU - HƯỚNG DẪN SỬ DỤNG VNLOGIN DLL (CHÚC BẠN THÀNH CÔNG)";
             // 
             // btnOpenSele
             // 
