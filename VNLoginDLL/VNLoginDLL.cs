@@ -460,54 +460,62 @@ namespace VNLoginDLL
         public static string licenseVNLogin { get; set; }
         public static string SignIn(string user, string license)
         {
-            Session = Marshal.PtrToStringAnsi(Token(user, license));
-            string mess = "";
-            switch (Session)
+            try
             {
-                case "this user can not have more than 1 device":
-                    mess = "er1";
-                    return mess;
-                    break;
-                case "license key is incorect":
-                    mess = "er2";
-                    return mess;
-                    break;
-                case "{error:The exception handler configured on ExceptionHandlerOptions produced a 404 status response. This InvalidOperationException containing the original exception was thrown since this is often due to a misconfigured ExceptionHandlingPath. If the exception handler is expected to return 404 status responses then set AllowStatusCode404Response to true.}":
-                    mess = "er3";
-                    return mess;
-                    break;
-            }    
+                Session = Marshal.PtrToStringAnsi(Token(user, license));
+                string mess = "";
+                switch (Session)
+                {
+                    case "this user can not have more than 1 device":
+                        mess = "er1";
+                        return mess;
+                        break;
+                    case "license key is incorect":
+                        mess = "er2";
+                        return mess;
+                        break;
+                    case "{error:The exception handler configured on ExceptionHandlerOptions produced a 404 status response. This InvalidOperationException containing the original exception was thrown since this is often due to a misconfigured ExceptionHandlingPath. If the exception handler is expected to return 404 status responses then set AllowStatusCode404Response to true.}":
+                        mess = "er3";
+                        return mess;
+                        break;
+                }
 
-            string info = Marshal.PtrToStringAnsi(CheckInfo(Session));
-            if ( info == "")
+                string info = Marshal.PtrToStringAnsi(CheckInfo(Session));
+                if (info == "")
+                {
+                    mess = "er4";
+                    return mess;
+                }
+                else
+                {
+                    userVNLogin = user;
+                    licenseVNLogin = license;
+
+                    string site = "https://dinhtu.vn/timenow.php";
+
+                    string[] timeNow = new WebClient().DownloadString(site).Split('/');
+                    int dayNow = int.Parse(timeNow[0]);
+                    int monthNow = int.Parse(timeNow[1]);
+                    int yearNow = int.Parse(timeNow[2]);
+
+                    string TimeEx = info.Substring(0, 8);
+
+                    int dayEx = int.Parse(TimeEx.Substring(6, 2));
+                    int monthEx = int.Parse(TimeEx.Substring(4, 2));
+                    int yearEx = int.Parse(TimeEx.Substring(0, 4));
+
+                    DateTime now = new DateTime(yearNow, monthNow, dayNow);
+                    DateTime ex = new DateTime(yearEx, monthEx, dayEx);
+
+                    int days = (int)Math.Ceiling(ex.Subtract(now).TotalDays);
+                    return days.ToString();
+                }
+            }
+            catch
             {
-                mess = "er4";
+                string mess = "er4";
                 return mess;
-            }   
-            else
-            {
-                userVNLogin = user;
-                licenseVNLogin = license;
-
-                string site = "https://dinhtu.vn/timenow.php";
-
-                string[] timeNow = new WebClient().DownloadString(site).Split('/');
-                int dayNow = int.Parse(timeNow[0]);
-                int monthNow = int.Parse(timeNow[1]);
-                int yearNow = int.Parse(timeNow[2]);
-
-                string TimeEx = info.Substring(0,8);
-
-                int dayEx = int.Parse(TimeEx.Substring(6, 2));
-                int monthEx = int.Parse(TimeEx.Substring(4, 2));
-                int yearEx = int.Parse(TimeEx.Substring(0, 4));
-
-                DateTime now = new DateTime(yearNow, monthNow, dayNow);
-                DateTime ex = new DateTime(yearEx, monthEx, dayEx);
-
-                int days = (int)Math.Ceiling(ex.Subtract(now).TotalDays);
-                return days.ToString();
-            }    
+            }
         }
 
         [DllImport("VNLogin.Library.dll", EntryPoint = "UpdateNameProfile", CallingConvention = CallingConvention.StdCall)]
@@ -588,74 +596,90 @@ namespace VNLoginDLL
 
         public static string BackupVNLogin(string ID, string PathBackup, bool DeleteProfile)
         {
-            string info = Marshal.PtrToStringAnsi(CheckInfo(Session));
-            string mess = "success";
-            if (info == "")
+            try
             {
-                Session = Marshal.PtrToStringAnsi(Token(userVNLogin, licenseVNLogin));
-                switch (Session)
+                string info = Marshal.PtrToStringAnsi(CheckInfo(Session));
+                string mess = "success";
+                if (info == "")
                 {
-                    case "this user can not have more than 1 device":
-                        mess = "er1";
-                        return mess;
-                        break;
-                    case "license key is incorect":
-                        mess = "er2";
-                        return mess;
-                        break;
-                    case "{error:The exception handler configured on ExceptionHandlerOptions produced a 404 status response. This InvalidOperationException containing the original exception was thrown since this is often due to a misconfigured ExceptionHandlingPath. If the exception handler is expected to return 404 status responses then set AllowStatusCode404Response to true.}":
-                        mess = "er3";
-                        return mess;
-                        break;
+                    Session = Marshal.PtrToStringAnsi(Token(userVNLogin, licenseVNLogin));
+                    switch (Session)
+                    {
+                        case "this user can not have more than 1 device":
+                            mess = "er1";
+                            return mess;
+                            break;
+                        case "license key is incorect":
+                            mess = "er2";
+                            return mess;
+                            break;
+                        case "{error:The exception handler configured on ExceptionHandlerOptions produced a 404 status response. This InvalidOperationException containing the original exception was thrown since this is often due to a misconfigured ExceptionHandlingPath. If the exception handler is expected to return 404 status responses then set AllowStatusCode404Response to true.}":
+                            mess = "er3";
+                            return mess;
+                            break;
+                    }
                 }
+
+                string PathProfile = AppDomain.CurrentDomain.BaseDirectory + "\\profile\\" + ID;
+                DeleteCache(PathProfile);
+                mess = Marshal.PtrToStringAnsi(Backup(userVNLogin, licenseVNLogin, Session, PathProfile, PathBackup, ID));
+
+                if (DeleteProfile == true)
+                {
+                    try
+                    {
+                        Directory.Delete(PathProfile, true);
+                    }
+                    catch { }
+                }
+
+                return mess;
             }
-
-            string PathProfile = AppDomain.CurrentDomain.BaseDirectory + "\\profile\\" + ID;
-            DeleteCache(PathProfile);
-            mess = Marshal.PtrToStringAnsi(Backup(userVNLogin, licenseVNLogin, Session,PathProfile, PathBackup, ID));
-
-            if (DeleteProfile == true)
+            catch
             {
-                try
-                {
-                   Directory.Delete(PathProfile, true);
-                }
-                catch { }
-            }    
-
-            return mess;
+                string mess = "er4";
+                return mess;
+            }
 
         }
 
         public static string RestoreVNLogin(string FileBackup)
         {
-            string info = Marshal.PtrToStringAnsi(CheckInfo(Session));
-            string mess = "success";
-            if (info == "")
+            try
             {
-                Session = Marshal.PtrToStringAnsi(Token(userVNLogin, licenseVNLogin));
-                switch (Session)
+                string info = Marshal.PtrToStringAnsi(CheckInfo(Session));
+                string mess = "success";
+                if (info == "")
                 {
-                    case "this user can not have more than 1 device":
-                        mess = "er1";
-                        return mess;
-                        break;
-                    case "license key is incorect":
-                        mess = "er2";
-                        return mess;
-                        break;
-                    case "{error:The exception handler configured on ExceptionHandlerOptions produced a 404 status response. This InvalidOperationException containing the original exception was thrown since this is often due to a misconfigured ExceptionHandlingPath. If the exception handler is expected to return 404 status responses then set AllowStatusCode404Response to true.}":
-                        mess = "er3";
-                        return mess;
-                        break;
+                    Session = Marshal.PtrToStringAnsi(Token(userVNLogin, licenseVNLogin));
+                    switch (Session)
+                    {
+                        case "this user can not have more than 1 device":
+                            mess = "er1";
+                            return mess;
+                            break;
+                        case "license key is incorect":
+                            mess = "er2";
+                            return mess;
+                            break;
+                        case "{error:The exception handler configured on ExceptionHandlerOptions produced a 404 status response. This InvalidOperationException containing the original exception was thrown since this is often due to a misconfigured ExceptionHandlingPath. If the exception handler is expected to return 404 status responses then set AllowStatusCode404Response to true.}":
+                            mess = "er3";
+                            return mess;
+                            break;
+                    }
                 }
-            }
-            string[] pathArr = FileBackup.Split('\\');
-            string ID = pathArr.Last().Replace(".zip","");
-            string PathProfile = AppDomain.CurrentDomain.BaseDirectory + "\\profile\\" + ID;
-            mess = Marshal.PtrToStringAnsi(Restore(userVNLogin, licenseVNLogin, Session, FileBackup, PathProfile));
+                string[] pathArr = FileBackup.Split('\\');
+                string ID = pathArr.Last().Replace(".zip", "");
+                string PathProfile = AppDomain.CurrentDomain.BaseDirectory + "\\profile\\" + ID;
+                mess = Marshal.PtrToStringAnsi(Restore(userVNLogin, licenseVNLogin, Session, FileBackup, PathProfile));
 
-            return mess;
+                return mess;
+            }
+            catch
+            {
+                string mess = "er4";
+                return mess;
+            }
 
         }
 
