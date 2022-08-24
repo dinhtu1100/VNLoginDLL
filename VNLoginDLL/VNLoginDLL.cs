@@ -496,9 +496,7 @@ namespace VNLoginDLL
                 int monthNow = int.Parse(timeNow[1]);
                 int yearNow = int.Parse(timeNow[2]);
 
-                string TimeEx = Regex.Match(info, @"expTime...*?0000", RegexOptions.Singleline).Value
-                        .Replace(Regex.Match(info, @"expTime..", RegexOptions.Singleline).Value, "")
-                        .Replace(@"0000", "");
+                string TimeEx = info.Substring(1,8);
 
                 int dayEx = int.Parse(TimeEx.Substring(6, 2));
                 int monthEx = int.Parse(TimeEx.Substring(4, 2));

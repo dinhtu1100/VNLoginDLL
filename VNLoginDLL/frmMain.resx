@@ -117,4 +117,18 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="label21.Text" xml:space="preserve">
+    <value>2. Khi dùng các hàm sẽ có những lỗi sau được trả về:
+
+er1: (lỗi quá giới hạn thiết bị được phép đăng nhập, chờ vài phút để session reset)
+er2: (lỗi key không đúng)
+er3: (lỗi user không tồn tại)
+expired: (lỗi hết hạn sử dụng key)</value>
+  </data>
+  <data name="label20.Text" xml:space="preserve">
+    <value>1. System.BadImageFormatException: 'An attempt was made to load a program with an incorrect format
+
+   -Nguyên nhân: bạn đang bật Prefer 32bit trong Properties -&gt; Build -&gt; Platform targer
+   - Khắc phục: Tắt chế độ Prefer 32bit.</value>
+  </data>
 </root>

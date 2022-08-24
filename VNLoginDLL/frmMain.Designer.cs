@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.btniphone = new System.Windows.Forms.Button();
             this.btnandroid = new System.Windows.Forms.Button();
             this.btnlinux = new System.Windows.Forms.Button();
@@ -77,9 +78,12 @@
             this.btnOpenSele = new System.Windows.Forms.Button();
             this.label19 = new System.Windows.Forms.Label();
             this.txtOpenSele = new System.Windows.Forms.TextBox();
+            this.label20 = new System.Windows.Forms.Label();
+            this.label21 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            this.groupBox4.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox6.SuspendLayout();
             this.SuspendLayout();
@@ -350,9 +354,11 @@
             // 
             // groupBox4
             // 
-            this.groupBox4.Location = new System.Drawing.Point(673, 305);
+            this.groupBox4.Controls.Add(this.label21);
+            this.groupBox4.Controls.Add(this.label20);
+            this.groupBox4.Location = new System.Drawing.Point(673, 235);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(284, 134);
+            this.groupBox4.Size = new System.Drawing.Size(284, 204);
             this.groupBox4.TabIndex = 11;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Lỗi thường gặp";
@@ -442,7 +448,7 @@
             this.groupBox6.Controls.Add(this.label13);
             this.groupBox6.Location = new System.Drawing.Point(673, 49);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(284, 250);
+            this.groupBox6.Size = new System.Drawing.Size(284, 180);
             this.groupBox6.TabIndex = 13;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "5: Open - Open remote port - Open Sele thường";
@@ -562,6 +568,22 @@
             this.txtOpenSele.Size = new System.Drawing.Size(133, 20);
             this.txtOpenSele.TabIndex = 18;
             // 
+            // label20
+            // 
+            this.label20.Location = new System.Drawing.Point(8, 20);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(270, 82);
+            this.label20.TabIndex = 21;
+            this.label20.Text = resources.GetString("label20.Text");
+            // 
+            // label21
+            // 
+            this.label21.Location = new System.Drawing.Point(8, 104);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(270, 93);
+            this.label21.TabIndex = 22;
+            this.label21.Text = resources.GetString("label21.Text");
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -584,6 +606,7 @@
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
+            this.groupBox4.ResumeLayout(false);
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
             this.groupBox6.ResumeLayout(false);
@@ -643,6 +666,8 @@
         private System.Windows.Forms.TextBox txtOpenSele;
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.Label label20;
     }
 }
 
