@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using xNet;
 
 namespace VNLoginDLL
 {
+    
     public class VNLoginDLL
     {
         public static string Open(string Orbitar, string id, string ProxyType, string ip, string port)
@@ -42,11 +47,11 @@ namespace VNLoginDLL
             string PID = process.Id.ToString();
             return PID;
         }
-        public static string Win(string user, string pass, string name, string ProxyType, string ip, string port, string userip, string passip, string url)
+        public static string Win(string name, string ProxyType, string ip, string port, string userip, string passip, string url)
         {
             string LoaiProxy = "";
 
-            switch (LoaiProxy)
+            switch (ProxyType)
             {
                 case "http":
                     LoaiProxy = "HTTP Proxy";
@@ -69,13 +74,21 @@ namespace VNLoginDLL
             GPU_win();
             string txtvendor = Marshal.PtrToStringAnsi(vendorLB());
             string txtrender = Marshal.PtrToStringAnsi(rendererLB());
-            Creat(user, pass, "true", "noise", "8", "4", "1", "2", "1", "false", height, width, name, "0", "Win32", LoaiProxy, "", ip, port, userip, passip, url, UA, txtrender, txtvendor);
-            return Marshal.PtrToStringAnsi(id());
+            string mess = Newprofile("true", "noise", "8", "4", "1", "2", "1", "false", height, width, name, "0", "Win32", LoaiProxy, "", ip, port, userip, passip, url, UA, txtrender, txtvendor);
+            if (mess != "er1" && mess != "er2" && mess != "er3" && mess != "expired")
+            {
+                //return Marshal.PtrToStringAnsi(id());
+                return Marshal.PtrToStringAnsi(id());
+            }    
+            else
+            {
+                return mess;
+            }    
         }
         public static string Mac(string user, string pass, string name, string ProxyType, string ip, string port, string userip, string passip, string url)
         {
             string LoaiProxy = "";
-            switch (LoaiProxy)
+            switch (ProxyType)
             {
                 case "http":
                     LoaiProxy = "HTTP Proxy";
@@ -97,13 +110,13 @@ namespace VNLoginDLL
             GPU_mac_intel();
             string txtvendor = Marshal.PtrToStringAnsi(vendorLB());
             string txtrender = Marshal.PtrToStringAnsi(rendererLB());
-            Creat(user, pass, "true", "noise", "8", "4", "1", "2", "1", "false", height, width, name, "0", "Win32", LoaiProxy, "", ip, port, userip, passip, url, UA, txtrender, txtvendor);
+            Newprofile("true", "noise", "8", "4", "1", "2", "1", "false", height, width, name, "0", "Win32", LoaiProxy, "", ip, port, userip, passip, url, UA, txtrender, txtvendor);
             return Marshal.PtrToStringAnsi(id());
         }
         public static string Linux(string user, string pass, string name, string ProxyType, string ip, string port, string userip, string passip, string url)
         {
             string LoaiProxy = "";
-            switch (LoaiProxy)
+            switch (ProxyType)
             {
                 case "http":
                     LoaiProxy = "HTTP Proxy";
@@ -127,13 +140,13 @@ namespace VNLoginDLL
             GPU_linux();
             string txtvendor = Marshal.PtrToStringAnsi(vendorLB());
             string txtrender = Marshal.PtrToStringAnsi(rendererLB());
-            Creat(user, pass, "true", "noise", "8", "4", "1", "2", "1", "false", height, width, name, "0", txtPlatform, LoaiProxy, "", ip, port, userip, passip, url, UA, txtrender, txtvendor);
+            Newprofile( "true", "noise", "8", "4", "1", "2", "1", "false", height, width, name, "0", txtPlatform, LoaiProxy, "", ip, port, userip, passip, url, UA, txtrender, txtvendor);
             return Marshal.PtrToStringAnsi(id());
         }
         public static string Android(string user, string pass, string name, string ProxyType, string ip, string port, string userip, string passip, string url)
         {
             string LoaiProxy = "";
-            switch (LoaiProxy)
+            switch (ProxyType)
             {
                 case "http":
                     LoaiProxy = "HTTP Proxy";
@@ -158,13 +171,13 @@ namespace VNLoginDLL
             GPU_win();
             string txtvendor = Marshal.PtrToStringAnsi(vendorLB());
             string txtrender = Marshal.PtrToStringAnsi(rendererLB());
-            Creat(user, pass, "true", "noise", "8", "4", "1", "2", "1", "true", height, width, name, "5", txtPlatform, LoaiProxy, "", ip, port, userip, passip, url, UA, txtrender, txtvendor);
+            Newprofile( "true", "noise", "8", "4", "1", "2", "1", "true", height, width, name, "5", txtPlatform, LoaiProxy, "", ip, port, userip, passip, url, UA, txtrender, txtvendor);
             return Marshal.PtrToStringAnsi(id());
         }
         public static string Iphone(string user, string pass, string name, string ProxyType, string ip, string port, string userip, string passip, string url)
         {
             string LoaiProxy = "";
-            switch (LoaiProxy)
+            switch (ProxyType)
             {
                 case "http":
                     LoaiProxy = "HTTP Proxy";
@@ -185,7 +198,7 @@ namespace VNLoginDLL
             UA_Iphone();
             string UA = Marshal.PtrToStringAnsi(useragent());
             GPU_win();
-            Creat(user, pass, "true", "noise", "8", "4", "1", "2", "1", "true", height, width, name, "5", "iOS", LoaiProxy, "", ip, port, userip, passip, url, UA, "Apple GPU", "Apple Inc.");
+            Newprofile( "true", "noise", "8", "4", "1", "2", "1", "true", height, width, name, "5", "iOS", LoaiProxy, "", ip, port, userip, passip, url, UA, "Apple GPU", "Apple Inc.");
             return Marshal.PtrToStringAnsi(id());
         }
         [DllImport("VNLogin.Library.dll", EntryPoint = "id", CallingConvention = CallingConvention.StdCall)]
@@ -387,6 +400,8 @@ namespace VNLoginDLL
         [DllImport("VNLogin.Library.dll", EntryPoint = "useragent", CallingConvention = CallingConvention.StdCall)]
         public static extern IntPtr useragent();
 
+        
+
         [DllImport("VNLogin.Library.dll", EntryPoint = "CreateWin", CallingConvention = CallingConvention.StdCall)]
         public static extern void CreateWin(string user, string pass, string uid, string nameProfile, string fullproxy);
 
@@ -401,21 +416,225 @@ namespace VNLoginDLL
 
         [DllImport("VNLogin.Library.dll", EntryPoint = "CreateIphone", CallingConvention = CallingConvention.StdCall)]
         public static extern void CreateIphone(string user, string pass, string uid, string nameProfile, string fullproxy);
+   
+        [DllImport("VNLogin.Library.dll", EntryPoint = "Token", CallingConvention = CallingConvention.StdCall)]
+        public static extern IntPtr Token(string user, string license);
 
-        [DllImport("VNLogin.Library.dll", EntryPoint = "SetProxy", CallingConvention = CallingConvention.StdCall)]
-        public static extern void SetProxy(string id, string fullproxy);
+        [DllImport("VNLogin.Library.dll", EntryPoint = "CheckInfo", CallingConvention = CallingConvention.StdCall)]
+        public static extern IntPtr CheckInfo(string token);
+        public static string Session { get; set; }
+        public static string userVNLogin { get; set; }
+        public static string licenseVNLogin { get; set; }
+        public static string SignIn(string user, string license)
+        {
+            Session = Marshal.PtrToStringAnsi(Token(user, license));
+            string mess = "";
+            switch (Session)
+            {
+                case "this user can not have more than 1 device":
+                    mess = "er1";
+                    return mess;
+                    break;
+                case "license key is incorect":
+                    mess = "er2";
+                    return mess;
+                    break;
+                case "{error:The exception handler configured on ExceptionHandlerOptions produced a 404 status response. This InvalidOperationException containing the original exception was thrown since this is often due to a misconfigured ExceptionHandlingPath. If the exception handler is expected to return 404 status responses then set AllowStatusCode404Response to true.}":
+                    mess = "er3";
+                    return mess;
+                    break;
+            }    
 
-        [DllImport("VNLogin.Library.dll", EntryPoint = "DangKy", CallingConvention = CallingConvention.StdCall)]
-        public static extern bool DangKy(string user, string pass, string email, string license);
+            string info = Marshal.PtrToStringAnsi(CheckInfo(Session));
+            if ( info == "")
+            {
+                mess = "er4";
+                return mess;
+            }   
+            else
+            {
+                userVNLogin = user;
+                licenseVNLogin = license;
 
-        [DllImport("VNLogin.Library.dll", EntryPoint = "DangXuat", CallingConvention = CallingConvention.StdCall)]
-        public static extern bool DangXuat(string user);
+                string site = "https://dinhtu.vn/timenow.php";
 
-        [DllImport("VNLogin.Library.dll", EntryPoint = "DangNhap", CallingConvention = CallingConvention.StdCall)]
-        public static extern bool DangNhap(string user, string pass);
+                string[] timeNow = new WebClient().DownloadString(site).Split('/');
+                int dayNow = int.Parse(timeNow[0]);
+                int monthNow = int.Parse(timeNow[1]);
+                int yearNow = int.Parse(timeNow[2]);
+
+                string TimeEx = Regex.Match(info, @"expTime...*?0000", RegexOptions.Singleline).Value
+                        .Replace(Regex.Match(info, @"expTime..", RegexOptions.Singleline).Value, "")
+                        .Replace(@"0000", "");
+
+                int dayEx = int.Parse(TimeEx.Substring(6, 2));
+                int monthEx = int.Parse(TimeEx.Substring(4, 2));
+                int yearEx = int.Parse(TimeEx.Substring(0, 4));
+
+                DateTime now = new DateTime(yearNow, monthNow, dayNow);
+                DateTime ex = new DateTime(yearEx, monthEx, dayEx);
+
+                int days = (int)Math.Ceiling(ex.Subtract(now).TotalDays);
+                return days.ToString();
+            }    
+        }
+
+        [DllImport("VNLogin.Library.dll", EntryPoint = "UpdateNameProfile", CallingConvention = CallingConvention.StdCall)]
+        public static extern void UpdateNameProfile(string ID, string NewName);
+
+        [DllImport("VNLogin.Library.dll", EntryPoint = "UpdateProxy", CallingConvention = CallingConvention.StdCall)]
+        public static extern void UpdateProxy(string ID, string IP, string UserIP, string PassIP, string TimeZone, string Long, string Lat);
+
+        public static void Proxy(string ID, string ProxyType, string IP, string Port, string UserIP, string PassIP)
+        {
+            string _IPupdate = _IP(ProxyType, IP, Port, UserIP, PassIP);
+            _infoIP(_IPupdate);
+            UpdateProxy(ID, _IPupdate, UserIP, PassIP,tizo,longitude,latitude);
+        }
+
+        private static string _IP(string ProxyType, string IP, string Port, string UserIP, string PassIP)
+        {
+            HttpRequest http = new HttpRequest();
+            try
+            {
+                string fullIP = IP + ":" + Port + ":" + UserIP + ":" + PassIP;
+                switch (ProxyType)
+                {
+                    case "http":
+                        http.Proxy = HttpProxyClient.Parse(fullIP);
+                        break;
+                    case "socks4":
+                        http.Proxy = Socks4ProxyClient.Parse(fullIP);
+                        break;
+                    case "socks5":
+                        http.Proxy = Socks5ProxyClient.Parse(fullIP);
+                        break;
+                }
+                return http.Get("http://checkip.amazonaws.com/").ToString().Replace("\n","");
+            }
+            catch
+            {
+                return string.Empty;
+            }
+
+        }
+
+        private static void _infoIP(string IP)
+        {
+            HttpRequest http = new HttpRequest();
+            try
+            {
+                string info = http.Get($"http://ip-api.com/json/{IP}").ToString();
+                latitude = Regex.Match(info, @"""lat...*?,", RegexOptions.Singleline).Value.
+                    Replace(Regex.Match(info, @"""lat..", RegexOptions.Singleline).Value, "").
+                    Replace(@",", "");
+
+                longitude = Regex.Match(info, @"""lon...*?,", RegexOptions.Singleline).Value.
+                Replace(Regex.Match(info, @"""lon..", RegexOptions.Singleline).Value, "").
+                Replace(@",", "");
+
+                tizo = Regex.Match(info, @"timezone....*?""", RegexOptions.Singleline).Value.
+                Replace(Regex.Match(info, @"timezone...", RegexOptions.Singleline).Value, "").
+                Replace(@"""", "");
+            }
+            catch { }
+            
+        }
+        public static string latitude { get; set; }
+        public static string longitude { get; set; }
+        public static string tizo { get; set; }
+
+        [DllImport("VNLogin.Library.dll", EntryPoint = "UpdateUA", CallingConvention = CallingConvention.StdCall)]
+        public static extern void UpdateUA(string ID, string NewUA);
 
         [DllImport("VNLogin.Library.dll", EntryPoint = "Backup", CallingConvention = CallingConvention.StdCall)]
-        public static extern void Backup(string profile, string pathBackup, string name);
+        public static extern IntPtr Backup(string user, string license, string token,
+            string profile, string pathBackup, string name);
+
+        [DllImport("VNLogin.Library.dll", EntryPoint = "Restore", CallingConvention = CallingConvention.StdCall)]
+        public static extern IntPtr Restore(string user, string license, string token,
+            string PathRestore, string pathVNLogin);
+
+        public static string BackupVNLogin(string ID, string PathBackup, bool DeleteProfile)
+        {
+            string info = Marshal.PtrToStringAnsi(CheckInfo(Session));
+            string mess = "success";
+            if (info == "")
+            {
+                Session = Marshal.PtrToStringAnsi(Token(userVNLogin, licenseVNLogin));
+                switch (Session)
+                {
+                    case "this user can not have more than 1 device":
+                        mess = "er1";
+                        return mess;
+                        break;
+                    case "license key is incorect":
+                        mess = "er2";
+                        return mess;
+                        break;
+                    case "{error:The exception handler configured on ExceptionHandlerOptions produced a 404 status response. This InvalidOperationException containing the original exception was thrown since this is often due to a misconfigured ExceptionHandlingPath. If the exception handler is expected to return 404 status responses then set AllowStatusCode404Response to true.}":
+                        mess = "er3";
+                        return mess;
+                        break;
+                }
+            }
+
+            string PathProfile = AppDomain.CurrentDomain.BaseDirectory + "\\profile\\" + ID;
+            DeleteCache(PathProfile);
+            mess = Marshal.PtrToStringAnsi(Backup(userVNLogin, licenseVNLogin, Session,PathProfile, PathBackup, ID));
+
+            if (DeleteProfile == true)
+            {
+                try
+                {
+                   Directory.Delete(PathProfile, true);
+                }
+                catch { }
+            }    
+
+            return mess;
+
+        }
+
+        public static string RestoreVNLogin(string FileBackup, bool DeleteBackup)
+        {
+            string info = Marshal.PtrToStringAnsi(CheckInfo(Session));
+            string mess = "success";
+            if (info == "")
+            {
+                Session = Marshal.PtrToStringAnsi(Token(userVNLogin, licenseVNLogin));
+                switch (Session)
+                {
+                    case "this user can not have more than 1 device":
+                        mess = "er1";
+                        return mess;
+                        break;
+                    case "license key is incorect":
+                        mess = "er2";
+                        return mess;
+                        break;
+                    case "{error:The exception handler configured on ExceptionHandlerOptions produced a 404 status response. This InvalidOperationException containing the original exception was thrown since this is often due to a misconfigured ExceptionHandlingPath. If the exception handler is expected to return 404 status responses then set AllowStatusCode404Response to true.}":
+                        mess = "er3";
+                        return mess;
+                        break;
+                }
+            }
+
+            string PathProfile = AppDomain.CurrentDomain.BaseDirectory + "\\profile\\";
+            mess = Marshal.PtrToStringAnsi(Restore(userVNLogin, licenseVNLogin, Session, FileBackup, PathProfile));
+
+            if (DeleteBackup == true)
+            {
+                try
+                {
+                    Directory.Delete(FileBackup, true);
+                }
+                catch { }
+            }
+
+            return mess;
+
+        }
 
         [DllImport("VNLogin.Library.dll", EntryPoint = "UA_Android", CallingConvention = CallingConvention.StdCall)]
         public static extern void UA_Android();
@@ -449,15 +668,9 @@ namespace VNLoginDLL
 
         [DllImport("VNLogin.Library.dll", EntryPoint = "DirectoryCopy", CallingConvention = CallingConvention.StdCall)]
         public static extern void DirectoryCopy(string fileGoc, string fileCopy);
-
-        [DllImport("VNLogin.Library.dll", EntryPoint = "Initialize", CallingConvention = CallingConvention.StdCall)]
-        public static extern void Initialize();
-
+                
         [DllImport("VNLogin.Library.dll", EntryPoint = "DeleteCache", CallingConvention = CallingConvention.StdCall)]
         public static extern void DeleteCache(string PathProfile);
-
-        [DllImport("VNLogin.Library.dll", EntryPoint = "Restore", CallingConvention = CallingConvention.StdCall)]
-        public static extern void Restore(string PathRestore, string pathVNLogin);
 
         [DllImport("VNLogin.Library.dll", EntryPoint = "LoadDesign", CallingConvention = CallingConvention.StdCall)]
         public static extern void LoadDesign(string user, string pass);
@@ -558,7 +771,7 @@ namespace VNLoginDLL
         string thumuc2);
 
         [DllImport("VNLogin.Library.dll", EntryPoint = "Creat", CallingConvention = CallingConvention.StdCall)]
-        public static extern void Creat(string user, string pass,
+        public static extern IntPtr Creat(string user, string license, string token,
         string audioContext_mode2, string canvasMode2, string deviceMemory2, string hardwareConcurrency2,
         string audioInputs2, string audioOutputs2, string videoInputs2,
         string mobile_enable2, string mobile_height2, string mobile_width2,
@@ -567,6 +780,51 @@ namespace VNLoginDLL
         string startupUrl2,
         string userAgent2,
         string renderer2, string vendor2);
+
+        public static string Newprofile(string audioContext_mode2, string canvasMode2, string deviceMemory2, string hardwareConcurrency2,
+        string audioInputs2, string audioOutputs2, string videoInputs2,
+        string mobile_enable2, string mobile_height2, string mobile_width2,
+        string nameProfile, string max_touch_points2, string platform2,
+        string LoaiProxy2, string comboProxyFree, string publicIP2, string IP_Port2, string proxy_username2, string proxy_password2,
+        string startupUrl2,
+        string userAgent2,
+        string renderer2, string vendor2)
+        {
+            string info = Marshal.PtrToStringAnsi(CheckInfo(Session));
+            string mess = "success";
+            if (info == "")
+            {
+                Session = Marshal.PtrToStringAnsi(Token(userVNLogin, licenseVNLogin));
+                switch (Session)
+                {
+                    case "this user can not have more than 1 device":
+                        mess = "er1";
+                        return mess;
+                        break;
+                    case "license key is incorect":
+                        mess = "er2";
+                        return mess;
+                        break;
+                    case "{error:The exception handler configured on ExceptionHandlerOptions produced a 404 status response. This InvalidOperationException containing the original exception was thrown since this is often due to a misconfigured ExceptionHandlingPath. If the exception handler is expected to return 404 status responses then set AllowStatusCode404Response to true.}":
+                        mess = "er3";
+                        return mess;
+                        break;
+                }
+            }
+
+            mess = Marshal.PtrToStringAnsi(Creat( userVNLogin,  licenseVNLogin,  Session,
+         audioContext_mode2,  canvasMode2,  deviceMemory2,  hardwareConcurrency2,
+         audioInputs2,  audioOutputs2,  videoInputs2,
+         mobile_enable2,  mobile_height2,  mobile_width2,
+         nameProfile,  max_touch_points2,  platform2,
+         LoaiProxy2,  comboProxyFree,  publicIP2,  IP_Port2,  proxy_username2,  proxy_password2,
+         startupUrl2,
+         userAgent2,
+         renderer2,  vendor2));
+
+            return mess;
+            
+        }
 
     }
 }
